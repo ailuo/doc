@@ -1,0 +1,79 @@
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+安装文件位于/var/lib/docker
+
+1. 删除旧的安装
+# apt-get remove docker docker-engine docker.io
+
+2. 安装aufs存储驱动
+# apt-get update
+# apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+
+3. 安装docker仓库
+
+## 更新apt包索引
+# apt-get update
+
+## 安装包，以允许apt访问基于HTTPS的仓库
+# apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+## 增加Docker官方GPG key
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+## 验证现有此密钥：9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88
+# apt-key fingerprint 0EBFCD88
+
+## 增加稳定的Ubuntu仓库
+# add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+4. 安装Docker CE
+
+## 更新apt包索引
+# apt-get update
+
+## 查看docker版本列表
+apt-cache madison docker-ce
+
+## 安装docker指定版本，安装完之后，Docker daemon(Unix Socket)自动启动
+# apt-get install docker-ce=<VERSION>
+e.g.: # apt-get install docker-ce=17.12.1~ce-0~ubuntu
+
+## 安装 Docker CE最新版本
+apt-get install docker-ce
+
+
+5. 重启Ubuntu14.04
+## Ubuntu14.04重启之后,Docker Daemon将自动启动，确认方式
+# ps -ax | grep docker
+
+## 运行Hello World
+# docker run hello-world 
+
+
+6. 非root用户启动docker
+# cat /etc/group | grep docker  ## 可以看到已经用了docker这个组
+# cat /etc/passwd | grep docker-group-id ## 发现此组中并无用户, 所以目前只有root可以执行docker
+
+## 创建docker组 (Docker Daemon启动之后，docker组已经存在，不用执行)
+# groupadd docker 
+
+## 把当前用户增加到docker组
+$ sudo usermod -aG docker $USER
+
+$ 查看是否增加到dokcer组
+$ sudo groups $USER
+
+## 重启Ubuntu14.04
+
+## $USER执行docker
+$ docker run hello-world
+
+
+7. 升级Docker CE
+## 从第4步开始执行，并选定需要的版本
+
+8. 卸载Docker CE
+# apt-get purge docker-ce
+# rm -rf /var/lib/docker  
+
+
